@@ -1,0 +1,1 @@
+.\blinks.o: Blinks.s
