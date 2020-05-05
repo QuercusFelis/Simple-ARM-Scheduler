@@ -1,7 +1,5 @@
 ;*************************************************************** 
-; Andrew Groeling & Kris Alquist
-; Date 12-3-2019
-; Lab #9 - Simple Scheduler 
+; Simple Scheduler 
 ;*************************************************************** 
 ;	USAGE NOTES:
 ;	   -The scheduler MUST be initialized with at least 1
@@ -37,7 +35,7 @@ GPIO_PORTF_PCTL_R  	EQU 	0x4002552C
 SYSCTL_RCGCGPIO_R  	EQU 	0x400FE608
 PCTLCNST           	EQU 	0x0000FFF0
 
-DELAYCNTR			EQU		1600000    ; .1 sec at 16MHZ (16,000,000/10)
+DELAYCNTR    		EQU		1600000    ; .1 sec at 16MHZ (16,000,000/10)
 DELAYCNTRSHORT		EQU		DELAYCNTR/4
 
 ;**************************************************************
@@ -92,33 +90,33 @@ __main
 ;*********************************************************
 ProcAdd			;adds process to execution table, passed by R0
 		PUSH	{R1,R2,R3,R4,LR}
-		LDR		R1,=tabsize		;check if execution table is full	
+		LDR     R1,=tabsize		;check if execution table is full	
 		LDRB	R3,[R1]
-		LDR		R2,=tabcap
-		CMP		R3,R2			;compare size and capacity
-		BGE		paddend			;if full, exit without adding
-		LDR		R4,=statetab	;load address to write values to
-		LDR		R2,=exectab		;load table address
-		LSL		R3,#5			;multiply to use as offset for statetab
-		ADD		R4,R3			;add offset to statetab base address
-		LSR		R3,#3			;shift back to use as offset for exectab
-		STR		R4,[R2,R3]		;add relevant stack pointer to program to table
-		MOV		R2,#0			;clear r2 to create dummy processor state
-		STR		R2,[R4],#4		;dummy R0
-		STR		R2,[R4],#4		;dummy R1
-		STR		R2,[R4],#4		;dummy R2
-		STR		R2,[R4],#4		;dummy R3
-		STR		R2,[R4],#4		;dummy R12
-		LDR		R2,=0xFFFFFFF9	;dummy LR value
-		STR		R2,[R4],#4		;dummy LR
-		STR		R0,[R4],#4		;push program address to stack
-		LDR		R2,=0x81000000	;dummy xPSR value
-		STR		R2,[R4],#4		;push psuedo-xPSR
-		LSR		R3,#2			;shift offset back to size (faster than reloading)
-		ADD		R3,#1			;increment size
-		STRB	R3,[R1]			;store size
-paddend	POP		{R1,R2,R3,R4,LR}
-		BX		LR
+		LDR     R2,=tabcap
+		CMP     R3,R2			;compare size and capacity
+		BGE     paddend			;if full, exit without adding
+		LDR     R4,=statetab	;load address to write values to
+		LDR     R2,=exectab		;load table address
+		LSL     R3,#5			;multiply to use as offset for statetab
+		ADD     R4,R3			;add offset to statetab base address
+		LSR     R3,#3			;shift back to use as offset for exectab
+		STR     R4,[R2,R3]		;add relevant stack pointer to program to table
+		MOV     R2,#0			;clear r2 to create dummy processor state
+		STR     R2,[R4],#4		;dummy R0
+		STR     R2,[R4],#4		;dummy R1
+		STR     R2,[R4],#4		;dummy R2
+		STR     R2,[R4],#4		;dummy R3
+		STR     R2,[R4],#4		;dummy R12
+		LDR     R2,=0xFFFFFFF9	;dummy LR value
+		STR     R2,[R4],#4		;dummy LR
+		STR     R0,[R4],#4		;push program address to stack
+		LDR     R2,=0x81000000	;dummy xPSR value
+		STR     R2,[R4],#4		;push psuedo-xPSR
+		LSR     R3,#2			;shift offset back to size (faster than reloading)
+		ADD     R3,#1			;increment size
+		STRB    R3,[R1]			;store size
+paddend POP     {R1,R2,R3,R4,LR}
+		BX      LR
 
 ;*********************************************************
 ; ProcNext subroutine
